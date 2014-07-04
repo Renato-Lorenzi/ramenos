@@ -1,8 +1,8 @@
-package br.com.rml.ramenos.api.socket
+package br.com.rml.ramenos.communication.socket
 
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.SimpleType
-import br.com.rml.ramenos.api.RamenosClient
+import br.com.rml.ramenos.communication.RamenosClient
 
 class RamenosClientSocket implements RamenosClient{
 

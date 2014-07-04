@@ -1,8 +1,8 @@
-package br.com.rml.ramenos.api.namedpipe
+package br.com.rml.ramenos.communication.namedpipe
 
 import br.com.rml.jnamedpipe.JNAKernel32
-import br.com.rml.ramenos.api.helper.UnsupportedInputStream
-import br.com.rml.ramenos.api.helper.UnsupportedOutputStream
+import br.com.rml.ramenos.communication.helper.UnsupportedInputStream
+import br.com.rml.ramenos.communication.helper.UnsupportedOutputStream
 
 import com.sun.jna.ptr.IntByReference
 

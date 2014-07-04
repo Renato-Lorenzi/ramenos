@@ -1,4 +1,4 @@
-package br.com.rml.ramenos.api.helper
+package br.com.rml.ramenos.communication.helper
 
 
 class UnsupportedOutputStream extends OutputStream {

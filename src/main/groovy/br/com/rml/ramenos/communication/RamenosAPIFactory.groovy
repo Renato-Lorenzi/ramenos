@@ -1,7 +1,7 @@
-package br.com.rml.ramenos.api
+package br.com.rml.ramenos.communication
 
-import br.com.rml.ramenos.api.socket.RamenosClientSocket
-import br.com.rml.ramenos.api.socket.RamenosServerSocket
+import br.com.rml.ramenos.communication.socket.RamenosClientSocket
+import br.com.rml.ramenos.communication.socket.RamenosServerSocket
 
 class RamenosAPIFactory {
 

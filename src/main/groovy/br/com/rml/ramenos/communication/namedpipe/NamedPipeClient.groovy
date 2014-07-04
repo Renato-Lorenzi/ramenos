@@ -1,10 +1,10 @@
-package br.com.rml.ramenos.api.namedpipe
+package br.com.rml.ramenos.communication.namedpipe
 
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.SimpleType
-import br.com.rml.ramenos.api.RamenosClient
-import br.com.rml.ramenos.api.helper.UnsupportedInputStream
-import br.com.rml.ramenos.api.helper.UnsupportedOutputStream
+import br.com.rml.ramenos.communication.RamenosClient
+import br.com.rml.ramenos.communication.helper.UnsupportedInputStream
+import br.com.rml.ramenos.communication.helper.UnsupportedOutputStream
 
 
 class NamedPipeClient implements RamenosClient {

@@ -1,4 +1,4 @@
-package br.com.rml.ramenos.api.namedpipe
+package br.com.rml.ramenos.communication.namedpipe
 
 import static br.com.rml.jnamedpipe.JNAKernel32.PIPE_ACCESS_DUPLEX
 import static br.com.rml.jnamedpipe.JNAKernel32.PIPE_READMODE_MESSAGE
@@ -8,7 +8,7 @@ import static br.com.rml.jnamedpipe.JNAKernel32.PIPE_WAIT
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.SimpleType
 import br.com.rml.jnamedpipe.JNAKernel32
-import br.com.rml.ramenos.api.RamenosServer
+import br.com.rml.ramenos.communication.RamenosServer
 
 class NamedPipeServer implements RamenosServer{
 	private JNAKernel32 k32lib = JNAKernel32.INSTANCE

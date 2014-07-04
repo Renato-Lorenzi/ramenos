@@ -1,13 +1,9 @@
 
-package br.com.rml.ramenos.api
+package br.com.rml.ramenos.communication
 
 import groovy.transform.stc.ClosureParams
 
 import groovy.transform.stc.SimpleType
-
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
 
 public interface RamenosClient {
 
