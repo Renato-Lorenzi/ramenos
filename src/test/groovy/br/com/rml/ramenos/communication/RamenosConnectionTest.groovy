@@ -38,4 +38,12 @@ class RamenosConnectionTest {
 
         assert EXPECTED == received
     }
+
+
+    @Test
+    public void test(){
+        assert true
+    }
+
+
 }
