@@ -1,5 +1,6 @@
 package br.com.rml.ramenos.messager
 
+import br.com.rml.ramenos.communication.RamenosAPIFactory
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.SimpleType
 
@@ -9,7 +10,7 @@ import groovy.transform.stc.SimpleType
 class Messeger {
 
 
-    Map<String,Buddy> buddies
+    Map<String, Buddy> buddies
 
     Messeger() {
         buddies = Buddies.load()
@@ -18,6 +19,11 @@ class Messeger {
     def start(@ClosureParams(value = SimpleType.class, options = ["br.com.rml.ramenos.messager.Buddy",
             "java.lang.String"
     ]) Closure closure) {
+
+        def server = RamenosAPIFactory.newServer()
+        server.accept { input, output ->
+
+        }
 
 
     }
