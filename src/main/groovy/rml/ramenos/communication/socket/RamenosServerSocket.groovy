@@ -6,12 +6,6 @@ import rml.ramenos.communication.RamenosServer
 
 class RamenosServerSocket implements RamenosServer {
 
-    private String serverName
-
-
-    RamenosServerSocket(String server) {
-        this.serverName = server
-    }
 
     def accept(@ClosureParams(value = SimpleType.class, options = ["java.io.InputStream", "java.io.OutputStream"
     ]) Closure closure) {

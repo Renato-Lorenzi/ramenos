@@ -17,6 +17,7 @@ import static rml.ramenos.messager.Messenger.ErrorKind.PACKAGE_NOT_SUPPORTED
 class Messenger {
 
     Map<String, Buddy> buddies
+
     private ChatCallback callback
 
     private enum PackageKind {
@@ -41,9 +42,8 @@ class Messenger {
     Messenger(ChatCallback callback) {
         this.callback = callback
         buddies = new HashMap<String, Buddy>()
-        buddies["renatol"] = new Buddy(user: "renatol", email: "renato.lorenzi@hotmail.com", machine: "localhost")
+        buddies = Buddies.load()
         start()
-        //        buddies = Buddies.load()
     }
 
     private def start() {
@@ -87,7 +87,7 @@ class Messenger {
 
     def sendMessage(Buddy buddy, String message) {
         def messageDef = new Message(sender: buddy, message: message)
-        def client = RamenosAPIFactory.newClient()
+        def client = RamenosAPIFactory.newClient(buddy.machine)
         client.accept { input, output ->
 
             try {

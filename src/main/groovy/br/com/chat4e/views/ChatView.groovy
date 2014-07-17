@@ -1,17 +1,22 @@
 package br.com.chat4e.views
 
-
 import br.com.chat4e.views.core.ChatViewPart
-import br.com.chat4e.views.core.ChatViewShow
 import org.eclipse.jface.action.Action
+import org.eclipse.jface.fieldassist.AutoCompleteField
+import org.eclipse.jface.fieldassist.TextContentAdapter
 import org.eclipse.swt.SWT
 import org.eclipse.swt.custom.CTabFolder
 import org.eclipse.swt.custom.CTabItem
 import org.eclipse.swt.events.DisposeEvent
 import org.eclipse.swt.events.DisposeListener
+import org.eclipse.swt.events.KeyEvent
+import org.eclipse.swt.events.KeyListener
 import org.eclipse.swt.layout.GridData
 import org.eclipse.swt.widgets.Composite
+import org.eclipse.swt.widgets.Control
+import org.eclipse.swt.widgets.Text
 import rml.ramenos.messager.Buddy
+import rml.ramenos.messager.Messenger
 
 /**
  * This program is free software: you can redistribute it and/or modify it under
@@ -37,6 +42,8 @@ class ChatView implements ChatViewPart {
     CTabFolder tabFolder
 
     SWTChatViewController chatViewer
+    Messenger messenger
+    Map<String, Buddy> buddies
     HashMap<Buddy, CTabItem> chatWindows
     DisposeListener disposeListener
     Action logModeToggle = null
@@ -45,11 +52,12 @@ class ChatView implements ChatViewPart {
     /**
      * The constructor.
      *
-     * @param chatViewController
      */
-    public ChatView(ChatViewShow chatViewController) {
-        chatViewer = SWTChatViewController.getInstance(chatViewController)
+    public ChatView() {
+        chatViewer = SWTChatViewController.getInstance()
         chatViewer.setChatView(this)
+        messenger = chatViewer.messenger
+        buddies = messenger.buddies
         chatWindows = new HashMap<Buddy, CTabItem>()
 
         disposeListener = new DisposeListener() {
@@ -66,9 +74,37 @@ class ChatView implements ChatViewPart {
     }
 
     public void createPartControl(Composite parent) {
+        def searchBox = new Text(parent, SWT.SEARCH | SWT.ICON_CANCEL
+                | SWT.ICON_SEARCH)
+        searchBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL))
+
+        def adapter = new TextContentAdapter() {
+            public void setControlContents(Control control, String text, int cursorPosition) {
+                super.setControlContents(control, text, cursorPosition)
+//                ensureWindowOpened(buddies[searchBox.text])
+            }
+        }
+
+
+        new AutoCompleteField(searchBox, adapter, buddies.keySet() as String[]);
         tabFolder = new CTabFolder(parent, SWT.BORDER)
         tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true))
 
+        //Isso tem que ficar depois do AutoCompleteField :-(
+        searchBox.addKeyListener(new KeyListener() {
+            @Override
+            void keyPressed(KeyEvent e) {
+                if (e.character.toString() in ['\r', '\n']) {
+                    def b = buddies[searchBox.text] ? buddies[searchBox.text] : new Buddy(machine: searchBox.text, user: searchBox.text)
+                    ensureWindowOpened(b)
+                }
+            }
+
+            @Override
+            void keyReleased(KeyEvent e) {
+
+            }
+        })
     }
 
     /**

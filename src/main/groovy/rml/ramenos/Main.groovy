@@ -1,7 +1,6 @@
 package rml.ramenos
 
 import br.com.chat4e.views.ChatViewerFactory
-import br.com.chat4e.views.core.ChatViewShow
 import org.eclipse.swt.SWT
 import org.eclipse.swt.layout.FillLayout
 import org.eclipse.swt.layout.GridData
@@ -26,9 +25,9 @@ class Main {
 //        def parentRight = new Composite(parent, SWT.NONE)
 //        parentRight.layoutData = new GridData(SWT.LEFT, SWT.TOP, true, true)
 
-        def accountView = ChatViewerFactory.createAccountViewPart({} as ChatViewShow)
-        accountView.createPartControl(parent)
-        def chatView = ChatViewerFactory.createChatViewPart({} as ChatViewShow)
+//        def accountView = ChatViewerFactory.createAccountViewPart({} as ChatViewShow)
+//        accountView.createPartControl(parent)
+        def chatView = ChatViewerFactory.createChatViewPart()
         chatView.createPartControl(parent)
 
         shell.open();

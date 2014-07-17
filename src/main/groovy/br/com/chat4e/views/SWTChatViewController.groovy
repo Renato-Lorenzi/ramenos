@@ -1,8 +1,6 @@
 package br.com.chat4e.views
 
 import br.com.chat4e.ChatCallback
-import br.com.chat4e.ComunicationException
-import br.com.chat4e.views.core.ChatViewShow
 import org.eclipse.swt.widgets.Display
 import rml.ramenos.messager.Buddy
 import rml.ramenos.messager.Messenger
@@ -33,24 +31,15 @@ class SWTChatViewController implements ChatCallback {
     static ChatCallback chatViewerImpl
     static SimpleDateFormat longDate = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss")
-    static SimpleDateFormat timeOnly = new SimpleDateFormat("hh:mm a")
+    static SimpleDateFormat timeOnly = new SimpleDateFormat("HH:mm")
     public static boolean logmode = true
-    private Messenger messager
+    private Messenger messenger
     protected ChatView chatView
-    protected AccountsView accountsview
-    private ChatViewShow chatViewController
 
     public void setChatView(ChatView chatView) {
         this.chatView = chatView
     }
 
-    public void setAccountsView(AccountsView accountsview) {
-        this.accountsview = accountsview
-    }
-
-    public AccountsView getAccountsview() {
-        return accountsview
-    }
 
     public ChatView getChatView() {
         return chatView
@@ -68,14 +57,13 @@ class SWTChatViewController implements ChatCallback {
 
     }
 
-    private String getFormattedTextForConversation(Buddy b, String message,
-                                                   boolean send) {
-        "${timeOnly.format(new Date())} - [${b.user}]:\n ${message}"
+    private String getFormattedTextForConversation(Buddy b, String message, boolean send) {
+        def user = send ? "me" : b.user
+        "[${timeOnly.format(new Date())} ${user}]\$\n${message}"
     }
 
-    private SWTChatViewController(ChatViewShow chatViewController) {
-        this.chatViewController = chatViewController
-        messager = new Messenger(this)
+    private SWTChatViewController() {
+        messenger = new Messenger(this)
     }
 
     @Override
@@ -84,7 +72,6 @@ class SWTChatViewController implements ChatCallback {
             public void run() {
                 if (s == null)
                     return
-                chatViewController.showView()
                 chatView.ensureWindowOpened(b)
                 String message = getFormattedTextForConversation(b, s, false)
                 // chatView.ensureWindowOpened(b)
@@ -113,12 +100,11 @@ class SWTChatViewController implements ChatCallback {
                     return
                 try {
                     message = s
-                    messager.sendMessage(b, s)
+                    messenger.sendMessage(b, s)
 
                     message = getFormattedTextForConversation(b, s, true)
-                } catch (ComunicationException e) {
-                    message = getFormattedTextForConversation(b, s, true)
-                    +" -- cannot be sent due to network issue"
+                } catch (Exception e) {
+                    message = getFormattedTextForConversation(b, s, true) + " -- cannot be sent due to network issue"
                 }
                 chatView.displayChatInConversation(b, message)
             }
@@ -129,15 +115,14 @@ class SWTChatViewController implements ChatCallback {
 
     static SWTChatViewController instance
 
-    public static SWTChatViewController getInstance(
-            ChatViewShow chatViewController) {
+    public static SWTChatViewController getInstance() {
         if (!instance) {
-            instance = new SWTChatViewController(chatViewController)
+            instance = new SWTChatViewController()
         }
         return instance;
     }
 
-    public Messenger getMessager() {
-        return messager
+    public Messenger getMessenger() {
+        return messenger
     }
 }

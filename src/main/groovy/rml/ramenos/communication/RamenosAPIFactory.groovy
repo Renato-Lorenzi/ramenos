@@ -5,12 +5,12 @@ import rml.ramenos.communication.socket.RamenosServerSocket
 
 class RamenosAPIFactory {
 
-    static RamenosClient newClient() {
-        return new RamenosClientSocket()
+    static RamenosClient newClient(String host) {
+        return new RamenosClientSocket(host: host)
     }
 
     static RamenosServer newServer() {
-        new RamenosServerSocket("localhost")
+        new RamenosServerSocket()
     }
 
 }
