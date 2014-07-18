@@ -6,7 +6,7 @@ package rml.ramenos.messager
 
 class Config {
 
-    static File RAMENOS_FOLDER = new File("./.ramenos")
+    static File RAMENOS_FOLDER = new File(new File(System.getenv("USERPROFILE")), ".ramenos")
 
     static File BUDDIES_DEFAULT_FILE = new File(RAMENOS_FOLDER, "/.buddies ")
 
@@ -23,7 +23,7 @@ class Config {
         def configFile = new File(RAMENOS_FOLDER, "config.properties")
         if (configFile.exists()) {
             configFile.withInputStream {
-                stream -> config.load(stream)
+                stream -> internalConfig.load(stream)
             }
         }
 
