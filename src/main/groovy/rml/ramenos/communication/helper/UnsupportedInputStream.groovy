@@ -1,7 +1,7 @@
 package rml.ramenos.communication.helper
 
 
-class UnsupportedInputStream extends InputStream {
+abstract class UnsupportedInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {

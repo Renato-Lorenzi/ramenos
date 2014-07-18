@@ -59,7 +59,7 @@ class SWTChatViewController implements ChatCallback {
 
     private String getFormattedTextForConversation(Buddy b, String message, boolean send) {
         def user = send ? "me" : b.user
-        "[${timeOnly.format(new Date())} ${user}]\$\n${message}"
+        "[${timeOnly.format(new Date())} ${user}]\$\r\n${message}"
     }
 
     private SWTChatViewController() {

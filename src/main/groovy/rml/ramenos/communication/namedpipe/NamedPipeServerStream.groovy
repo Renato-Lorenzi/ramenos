@@ -18,9 +18,24 @@ public class NamedPipeServerStream {
     public InputStream getInputStream() {
         return new UnsupportedInputStream() {
             @Override
+            public int read() throws IOException {
+                byte[] bytes = new byte[1]
+                read(bytes)
+                return bytes[0]
+            }
+
+            @Override
+            public int read(byte[] b, int off, int len) throws IOException {
+                byte[] bytes = new byte[len - off]
+                def ret = read(bytes)
+                System.arraycopy(bytes, 0, b, off, len)
+                return ret
+            }
+
+            @Override
             public int read(byte[] b) throws IOException {
                 IntByReference cbBytesRead = new IntByReference()
-                if (k32lib.ReadFile(hPipe, // handle to pipe
+                if (!k32lib.ReadFile(hPipe, // handle to pipe
                         b, // buffer to receive data
                         b.length, // size of buffer
                         cbBytesRead, // number of bytes read

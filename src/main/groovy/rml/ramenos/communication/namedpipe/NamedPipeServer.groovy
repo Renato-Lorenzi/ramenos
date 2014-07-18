@@ -10,12 +10,10 @@ import static rml.jnamedpipe.JNAKernel32.*
 class NamedPipeServer implements RamenosServer {
     private JNAKernel32 k32lib = JNAKernel32.INSTANCE
     private String pipeName
-    private Closure serverListener
 
     public NamedPipeServer(String pipeName) {
         super()
         this.pipeName = pipeName
-        this.serverListener = serverListener
     }
 
 
@@ -38,7 +36,7 @@ class NamedPipeServer implements RamenosServer {
                 Thread.start {
                     NamedPipeServerStream stream = new NamedPipeServerStream(hPipe)
                     try {
-                        serverListener(stream)
+                        closure(stream.inputStream, stream.outputStream)
                     } finally {
                         stream.close()
                     }
