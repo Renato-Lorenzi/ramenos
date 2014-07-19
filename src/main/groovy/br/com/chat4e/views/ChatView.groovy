@@ -54,7 +54,7 @@ class ChatView implements ChatViewPart {
      *
      */
     public ChatView() {
-        chatViewer = SWTChatViewController.getInstance()
+        chatViewer = new SWTChatViewController()
         chatViewer.setChatView(this)
         messenger = chatViewer.messenger
         buddies = messenger.buddies
@@ -156,5 +156,10 @@ class ChatView implements ChatViewPart {
 
     public void refresh() {
 
+    }
+
+    @Override
+    void dispose() {
+        chatViewer.dispose()
     }
 }

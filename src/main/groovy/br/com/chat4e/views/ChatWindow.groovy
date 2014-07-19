@@ -1,6 +1,5 @@
 package br.com.chat4e.views
 
-
 import org.eclipse.jface.resource.JFaceResources
 import org.eclipse.swt.SWT
 import org.eclipse.swt.custom.CTabItem
@@ -57,7 +56,7 @@ class ChatWindow extends Composite {
         this.item = item
         this.b = buddy
         this.setLayout(new GridLayout(1, false))
-        conversationText = new Text(this, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL)
+        conversationText = new Text(this, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.BORDER)
         conversationText.setFont(monospace)
         conversationText.setLayoutData(conversationTextGridData)
         conversationText.getVerticalBar().setSelection(
@@ -65,7 +64,7 @@ class ChatWindow extends Composite {
         conversationText.setBackground(new Color(conversationText.getDisplay(),
                 new RGB(255, 255, 255)))
         conversationText.setEditable(false)
-        chatText = new Text(this, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL)
+        chatText = new Text(this, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.BORDER)
         chatText.setText("")
         chatTextGridData.heightHint = 5 * chatText.lineHeight;
         chatText.setLayoutData(chatTextGridData)
@@ -79,6 +78,7 @@ class ChatWindow extends Composite {
                     String text = chatText.getText()
                     controller.sendChat(b, text)
                     chatText.setText("")
+                    e.doit = false
                 }
             }
         })

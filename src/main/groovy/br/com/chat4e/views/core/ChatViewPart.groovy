@@ -8,4 +8,6 @@ public interface ChatViewPart {
     public void setFocus()
 
     public void refresh()
+
+    public void dispose()
 }

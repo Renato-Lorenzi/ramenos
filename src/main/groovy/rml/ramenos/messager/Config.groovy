@@ -6,7 +6,7 @@ package rml.ramenos.messager
 
 class Config {
 
-    static File RAMENOS_FOLDER = new File(new File(System.getenv("USERPROFILE")), ".ramenos")
+    static File RAMENOS_FOLDER = new File(new File(System.properties["user.home"]), ".ramenos")
 
     static File BUDDIES_DEFAULT_FILE = new File(RAMENOS_FOLDER, "/.buddies ")
 

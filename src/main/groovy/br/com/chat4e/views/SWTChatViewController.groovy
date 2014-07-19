@@ -62,7 +62,7 @@ class SWTChatViewController implements ChatCallback {
         "[${timeOnly.format(new Date())} ${user}]\$\r\n${message}"
     }
 
-    private SWTChatViewController() {
+    public SWTChatViewController() {
         messenger = new Messenger(this)
     }
 
@@ -113,16 +113,11 @@ class SWTChatViewController implements ChatCallback {
     }
 
 
-    static SWTChatViewController instance
-
-    public static SWTChatViewController getInstance() {
-        if (!instance) {
-            instance = new SWTChatViewController()
-        }
-        return instance;
-    }
-
     public Messenger getMessenger() {
         return messenger
+    }
+
+    public void dispose() {
+        messenger.stop()
     }
 }

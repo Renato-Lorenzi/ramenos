@@ -7,14 +7,13 @@ import groovy.json.JsonBuilder
  * Created by renatol on 7/3/14.
  */
 class Buddies {
-
+    private static int tryCount
 
     def static Map<String, Buddy> load() {
         HashMap<String, Buddy> buddies = new HashMap<String, Buddy>()
-        //buddies[userName] = new Buddy(user: userName, machine: InetAddress.getLocalHost().getHostName())
         //internalLoad(buddies, Config.BUDDIES_DEFAULT_FILE)
         internalLoad(buddies, Config.BUDDIES_FILE)
-        def userName = System.getenv("USERNAME")
+        def userName = System.properties["user.name"]
         if (!buddies[userName]) {
             buddies[userName] = new Buddy(user: userName, machine: InetAddress.getLocalHost().getHostName())
             save(buddies.values() as Buddy[])
@@ -26,7 +25,6 @@ class Buddies {
 
     def static save(Buddy[] buddies) {
         def file = Config.BUDDIES_FILE
-        int tryCount
         if (file && file.exists()) {
             tryCount++
             try {
@@ -37,10 +35,13 @@ class Buddies {
                     writer.close()
                 }
             } catch (Exception e) {
-                if (tryCount > 3) {
+                sleep(200)
+                if (tryCount < 4) {
                     save(buddies)
+                    return
                 }
             }
+            tryCount = 0
         }
     }
 
