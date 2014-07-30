@@ -9,7 +9,7 @@ class RamenosServerSocket implements RamenosServer {
 
     def accept(@ClosureParams(value = SimpleType.class, options = ["java.io.InputStream", "java.io.OutputStream"
     ]) Closure closure) {
-        def server = new ServerSocket(8888)
+        def server = new ServerSocket(6969)
         server.soTimeout = Integer.MAX_VALUE
         while (true) {
             server.accept({ Socket socket ->

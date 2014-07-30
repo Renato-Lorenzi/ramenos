@@ -1,108 +1,127 @@
 package rml.jnamedpipe;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.sun.jna.Native;
+import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.win32.StdCallLibrary;
 import com.sun.jna.win32.W32APIFunctionMapper;
 import com.sun.jna.win32.W32APITypeMapper;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 //StdCall est n�cessaire pour la lib kernel32
 @SuppressWarnings("serial")
 public interface JNAKernel32 extends StdCallLibrary {
-	@SuppressWarnings("unchecked")
-	Map ASCII_OPTIONS = new HashMap() {
-		{
-			put(OPTION_TYPE_MAPPER, W32APITypeMapper.ASCII);
-			put(OPTION_FUNCTION_MAPPER, W32APIFunctionMapper.ASCII);
-		}
-	};
-	@SuppressWarnings("unchecked")
-	Map UNICODE_OPTIONS = new HashMap() {
-		{
-			put(OPTION_TYPE_MAPPER, W32APITypeMapper.UNICODE);
-			put(OPTION_FUNCTION_MAPPER, W32APIFunctionMapper.UNICODE);
-		}
-	};
+    @SuppressWarnings("unchecked")
+    Map ASCII_OPTIONS = new HashMap() {
+        {
+            put(OPTION_TYPE_MAPPER, W32APITypeMapper.ASCII);
+            put(OPTION_FUNCTION_MAPPER, W32APIFunctionMapper.ASCII);
+        }
+    };
+    @SuppressWarnings("unchecked")
+    Map UNICODE_OPTIONS = new HashMap() {
+        {
+            put(OPTION_TYPE_MAPPER, W32APITypeMapper.UNICODE);
+            put(OPTION_FUNCTION_MAPPER, W32APIFunctionMapper.UNICODE);
+        }
+    };
 
-	@SuppressWarnings("unchecked")
-	Map DEFAULT_OPTIONS = Boolean.getBoolean("w32.ascii") ? ASCII_OPTIONS
-			: UNICODE_OPTIONS;
+    @SuppressWarnings("unchecked")
+    Map DEFAULT_OPTIONS = Boolean.getBoolean("w32.ascii") ? ASCII_OPTIONS
+            : UNICODE_OPTIONS;
 
-	JNAKernel32 INSTANCE = (JNAKernel32) Native.loadLibrary("kernel32",
-			JNAKernel32.class, DEFAULT_OPTIONS);
+    JNAKernel32 INSTANCE = (JNAKernel32) Native.loadLibrary("kernel32",
+            JNAKernel32.class, DEFAULT_OPTIONS);
 
-	// return values
-	public static final int INVALID_HANDLE_VALUE = -1;
-	public static final int MAILSLOT_NO_MESSAGE = -1;
+    // return values
+    public static final int INVALID_HANDLE_VALUE = -1;
+    public static final int MAILSLOT_NO_MESSAGE = -1;
 
-	// timeout
-	public static final int MAILSLOT_WAIT_FOREVER = -1;
+    // timeout
+    public static final int MAILSLOT_WAIT_FOREVER = -1;
 
-	// msg sizes
-	public static final int MSG_ANY_SIZE = 0;
-	public static final int MSG_MAX_SIZE = 4096; // suffira pour tout le monde ?
-													// API MAX = 65536
+    // msg sizes
+    public static final int MSG_ANY_SIZE = 0;
+    public static final int MSG_MAX_SIZE = 4096; // suffira pour tout le monde ?
+    // API MAX = 65536
 
-	public static final int PIPE_ACCESS_DUPLEX = 0x00000003;
+    public static final int PIPE_ACCESS_DUPLEX = 0x00000003;
 
-	public static final int PIPE_TYPE_MESSAGE = 0x00000004;
-	public static final int PIPE_READMODE_MESSAGE = 0x00000002;
-	public static final int PIPE_WAIT = 0x00000000; // blocking mode
-	public static final int PIPE_UNLIMITED_INSTANCES = 255;
+    public static final int PIPE_TYPE_MESSAGE = 0x00000004;
+    public static final int PIPE_READMODE_MESSAGE = 0x00000002;
+    public static final int PIPE_WAIT = 0x00000000; // blocking mode
+    public static final int PIPE_UNLIMITED_INSTANCES = 255;
+    public static final int PIPE_ACCEPT_REMOTE_CLIENTS = 0x00000000;
 
-	// file access
-	public static final int GENERIC_READ = 0x80000000;
-	public static final int GENERIC_WRITE = 0x40000000;
+    // file access
+    public static final int GENERIC_READ = 0x80000000;
+    public static final int GENERIC_WRITE = 0x40000000;
 
-	// file shares
-	public static final int FILE_SHARE_READ = 1;
-	public static final int FILE_SHARE_WRITE = 2;
-	public static final int FILE_SHARE_DELETE = 4;
+    // file shares
+    public static final int FILE_SHARE_READ = 1;
+    public static final int FILE_SHARE_WRITE = 2;
+    public static final int FILE_SHARE_DELETE = 4;
 
-	// creation types
-	public static final int CREATE_ALWAYS = 2;
-	public static final int CREATE_NEW = 1;
-	public static final int OPEN_ALWAYS = 4;
-	public static final int OPEN_EXISTING = 3;
-	public static final int TRUNCATE_EXISTING = 5;
+    // creation types
+    public static final int CREATE_ALWAYS = 2;
+    public static final int CREATE_NEW = 1;
+    public static final int OPEN_ALWAYS = 4;
+    public static final int OPEN_EXISTING = 3;
+    public static final int TRUNCATE_EXISTING = 5;
 
-	// file attributes
-	public static final int FILE_ATTRIBUTE_NORMAL = 128;
+    public static class SECURITY_ATTRIBUTES extends Structure {
+        public int dwLength;
+        public int lpSecurityDescriptor;
+        public boolean bInheritHandle;
 
-	boolean CloseHandle(int hObject);
+        public SECURITY_ATTRIBUTES() {
+            dwLength = size();
+        }
 
-	int GetLastError();
+        protected List getFieldOrder() {
+            return Arrays.asList(new String[]{"dwLength", "lpSecurityDescriptor", "bInheritHandle"});
+        }
+    }
 
-	int CreateMailslot(String lpName, int nMaxMessageSize, int lReadTimeout,
-			int lpSecurityAttributes);
+    // file attributes
+    public static final int FILE_ATTRIBUTE_NORMAL = 128;
 
-	boolean GetMailslotInfo(int hMailslot, IntByReference lpMaxMessageSize,
-			IntByReference lpNextSize, IntByReference lpMessageCount,
-			IntByReference lpReadTimeout);
+    boolean CloseHandle(int hObject);
 
-	boolean SetMailslotInfo(int hMailslot, int lReadTimeout);
+    int GetLastError();
 
-	int CreateFile(String lpFileName, int dwDesiredAccess, int dwShareMode,
-			int lpSecurityAttributes, int dwCreationDisposition,
-			int dwFlagsAndAttributes, int hTemplateFile);
+    int CreateMailslot(String lpName, int nMaxMessageSize, int lReadTimeout,
+                       int lpSecurityAttributes);
 
-	boolean ReadFile(int hFile, byte[] lpBuffer, int nNumberOfBytesToRead,
-			IntByReference lpNumberOfBytesRead, int lpOverlapped);
+    boolean GetMailslotInfo(int hMailslot, IntByReference lpMaxMessageSize,
+                            IntByReference lpNextSize, IntByReference lpMessageCount,
+                            IntByReference lpReadTimeout);
 
-	boolean WriteFile(int hFile, byte[] lpBuffer, int nNumberOfBytesToWrite,
-			IntByReference lpNumberOfBytesWritten, int lpOverlapped);
+    boolean SetMailslotInfo(int hMailslot, int lReadTimeout);
 
-	int CreateNamedPipe(String lpName, int dwOpenMode, int dwPipeMode,
-			int nMaxInstances, int nOutBufferSize, int nInBufferSize,
-			int nDefaultTimeOut, int lpSecurityAttributes);
+    int CreateFile(String lpFileName, int dwDesiredAccess, int dwShareMode,
+                   int lpSecurityAttributes, int dwCreationDisposition,
+                   int dwFlagsAndAttributes, int hTemplateFile);
 
-	boolean ConnectNamedPipe(int hNamedPipe, int lpOverlapped);
+    boolean ReadFile(int hFile, byte[] lpBuffer, int nNumberOfBytesToRead,
+                     IntByReference lpNumberOfBytesRead, int lpOverlapped);
+
+    boolean WriteFile(int hFile, byte[] lpBuffer, int nNumberOfBytesToWrite,
+                      IntByReference lpNumberOfBytesWritten, int lpOverlapped);
+
+    int CreateNamedPipe(String lpName, int dwOpenMode, int dwPipeMode,
+                        int nMaxInstances, int nOutBufferSize, int nInBufferSize,
+                        int nDefaultTimeOut, SECURITY_ATTRIBUTES lpSecurityAttributes);
+
+
+    boolean ConnectNamedPipe(int hNamedPipe, int lpOverlapped);
 
 	/*
-	 * function ulong CreateMailslot(ref string lpName, ulong nMaxMessageSize,
+     * function ulong CreateMailslot(ref string lpName, ulong nMaxMessageSize,
 	 * ulong lReadTimeout, ulong lpSecurityAttributes) library "Kernel32.dll"
 	 * alias for "CreateMailslotW" function boolean GetMailslotInfo (ulong
 	 * hMailslot, ref ulong lpMaxMessageSize, ref ulong lpNextSize, ref ulong

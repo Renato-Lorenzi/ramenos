@@ -54,7 +54,7 @@ class ChatView implements ChatViewPart {
      *
      */
     public ChatView() {
-        chatViewer = new SWTChatViewController()
+        chatViewer = SWTChatViewController.instance
         chatViewer.setChatView(this)
         messenger = chatViewer.messenger
         buddies = messenger.buddies

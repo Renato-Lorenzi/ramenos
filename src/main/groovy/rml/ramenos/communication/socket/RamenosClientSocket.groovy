@@ -9,7 +9,7 @@ class RamenosClientSocket implements RamenosClient {
 
     public void accept(@ClosureParams(value = SimpleType.class, options = ["java.io.InputStream", "java.io.OutputStream"
     ]) Closure closure) {
-        def socket = new Socket(host, 8888)
+        def socket = new Socket(host, 6969)
         socket.soTimeout = 50000
         socket.withStreams { input, output ->
             closure(input, output)

@@ -21,12 +21,22 @@ class Main {
 
         shell.addShellListener(new ShellAdapter() {
 
+            public void shellIconified(ShellEvent shellEvent) {
+                shell.visible = false
+            }
+
             @Override
             void shellDeactivated(ShellEvent e) {
                 shell.visible = false
             }
 
+            @Override
+            void shellClosed(ShellEvent shellEvent) {
+                System.exit 0
+            }
+
         })
+
         trayIcon(shell, display)
         shell.setSize(300, 500);
         shell.setText("Ramenos messenger");
@@ -46,7 +56,8 @@ class Main {
 
 
     static trayIcon(Shell shell, Display display) {
-        Image image = new Image(display, 16, 16);
+        //Maven copy resources folder to root of jar and root of ".class" folder
+        Image image = new Image(display, getClass().getResourceAsStream("/with_message.png"));
         final Tray tray = display.getSystemTray();
         if (tray == null) {
             System.out.println("The system tray is not available");
